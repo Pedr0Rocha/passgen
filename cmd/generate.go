@@ -8,15 +8,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-/*
-	ADD SUPPORT TO
-	- uppercase
-	- lowercase
-	- symbols
-	- digits
-	- password length
-*/
-
 func init() {
 	rootCmd.AddCommand(generateCmd)
 }
@@ -26,7 +17,13 @@ var generateCmd = &cobra.Command{
 	Short: "Generates a random password.",
 	Long:  `Generates a random password mixing symbols, letter and numbers.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		password, err := password.Generate()
+		/* @TODO get args
+		- password length
+		- has symbols
+		- has uppercase
+		*/
+
+		password, err := password.Generate(15, true)
 		if err != nil {
 			log.Fatal(err)
 		}
