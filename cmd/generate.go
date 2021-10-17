@@ -22,8 +22,8 @@ var generateCmd = &cobra.Command{
 	Short: "Generates a random password.",
 	Long:  `Generates a random password mixing symbols, letter and numbers.`,
 	Args: func(cmd *cobra.Command, args []string) error {
-		if PasswordLength > 64 {
-			return fmt.Errorf("invalid password length (max. 64)")
+		if PasswordLength > 64 || PasswordLength <= 0 {
+			return fmt.Errorf("invalid password length (min. 1, max. 64)")
 		}
 
 		return nil
