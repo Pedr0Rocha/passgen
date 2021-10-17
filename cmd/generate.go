@@ -8,22 +8,28 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var PasswordLength int
+var HasSymbols bool
+
 func init() {
 	rootCmd.AddCommand(generateCmd)
+	generateCmd.Flags().IntVarP(&PasswordLength, "length", "l", 15, "Password length")
+	generateCmd.Flags().BoolVarP(&HasSymbols, "symbols", "s", true, "Enable symbols to the generated password")
 }
 
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "Generates a random password.",
 	Long:  `Generates a random password mixing symbols, letter and numbers.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		/* @TODO get args
-		- password length
-		- has symbols
-		- has uppercase
-		*/
+	Args: func(cmd *cobra.Command, args []string) error {
+		if PasswordLength > 64 {
+			return fmt.Errorf("invalid password length (max. 64)")
+		}
 
-		password, err := password.Generate(15, true)
+		return nil
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		password, err := password.Generate(PasswordLength, HasSymbols)
 		if err != nil {
 			log.Fatal(err)
 		}
