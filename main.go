@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/pedr0rocha/password-generator-cli/cmd"
+	"github.com/pedr0rocha/password-generator-cli/commands"
 )
 
 func main() {
-	cmd.Execute()
+	commands.Execute()
 }

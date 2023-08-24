@@ -1,9 +1,9 @@
 package password
 
 import (
-	"math"
+	"fmt"
 	"math/rand"
-	"time"
+	"strings"
 )
 
 const (
@@ -13,28 +13,65 @@ const (
 	Symbols      = "@&$#!%*._+-=()[]{}:?"
 )
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
 func Generate(passLength int, hasSymbols bool) (string, error) {
-	chars := LowerLetters + UpperLetters + Digits
+	tries := 10_000
 
 	password := ""
-	for i := 0; i < passLength; i++ {
-		char := string(chars[rand.Intn(len(chars))])
-		password += char
+	for tries > 0 {
+		password = buildRandomPassword(passLength, hasSymbols)
+		isValid := isValid(password, passLength, hasSymbols)
+
+		if isValid {
+			break
+		}
+
+		tries--
 	}
 
-	if hasSymbols {
-		nofSymbols := math.Ceil(float64(passLength) / 4)
-
-		for i := 0; i < int(nofSymbols); i++ {
-			index := rand.Intn(len(password))
-			randChar := string(Symbols[rand.Intn(len(Symbols))])
-			password = password[:index] + randChar + password[index+1:]
-		}
+	if tries == 0 {
+		return password, fmt.Errorf("retries exausted, could not generate a password with the set requirements")
 	}
 
 	return password, nil
+}
+
+func isValid(password string, length int, hasSymbols bool) bool {
+	if len(password) != length {
+		return false
+	}
+
+	if !strings.ContainsAny(password, Digits) {
+		return false
+	}
+
+	if hasSymbols {
+		if !strings.ContainsAny(password, Symbols) {
+			return false
+		}
+	}
+
+	if !strings.ContainsAny(password, LowerLetters) {
+		return false
+	}
+
+	if !strings.ContainsAny(password, UpperLetters) {
+		return false
+	}
+
+	return true
+}
+
+func buildRandomPassword(length int, hasSymbols bool) string {
+	chars := LowerLetters + UpperLetters + Digits
+
+	if hasSymbols {
+		chars += Symbols
+	}
+
+	password := ""
+	for i := 0; i < length; i++ {
+		password += string(chars[rand.Intn(len(chars))])
+	}
+
+	return password
 }

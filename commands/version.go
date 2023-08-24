@@ -1,4 +1,4 @@
-package cmd
+package commands
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	VERSION = "v1.0"
+	VERSION string = "v1.1"
 )
 
 func init() {
@@ -17,7 +17,9 @@ func init() {
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number of Password Generator CLI",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Password Generator CLI", VERSION)
-	},
+	Run:   printVersion,
+}
+
+func printVersion(cmd *cobra.Command, args []string) {
+	fmt.Println("passgen", VERSION)
 }
