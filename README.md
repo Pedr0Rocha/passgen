@@ -6,7 +6,7 @@ lowercase letter, a digit and a symbol (if enabled).
 ## Install
 
 ```bash
-go install github.com/pedr0rocha/passgen
+go install github.com/pedr0rocha/passgen@latest
 ```
 
 ## Usage
