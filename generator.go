@@ -1,4 +1,4 @@
-package password
+package main
 
 import (
 	"fmt"
@@ -13,13 +13,19 @@ const (
 	Symbols      = "@&$#!%*._+-=()[]{}:?"
 )
 
-func Generate(passLength int, hasSymbols bool) (string, error) {
-	tries := 10_000
+type Generator struct {
+	Length     int
+	HasSymbols bool
+	Attempts   int
+}
+
+func (g Generator) Generate() (string, error) {
+	tries := g.Attempts
 
 	password := ""
 	for tries > 0 {
-		password = buildRandomPassword(passLength, hasSymbols)
-		isValid := isValid(password, passLength, hasSymbols)
+		password = g.buildRandomPassword()
+		isValid := g.isValid(password)
 
 		if isValid {
 			break
@@ -35,8 +41,8 @@ func Generate(passLength int, hasSymbols bool) (string, error) {
 	return password, nil
 }
 
-func isValid(password string, length int, hasSymbols bool) bool {
-	if len(password) != length {
+func (g Generator) isValid(password string) bool {
+	if len(password) != g.Length {
 		return false
 	}
 
@@ -44,7 +50,7 @@ func isValid(password string, length int, hasSymbols bool) bool {
 		return false
 	}
 
-	if hasSymbols {
+	if g.HasSymbols {
 		if !strings.ContainsAny(password, Symbols) {
 			return false
 		}
@@ -61,15 +67,15 @@ func isValid(password string, length int, hasSymbols bool) bool {
 	return true
 }
 
-func buildRandomPassword(length int, hasSymbols bool) string {
+func (g Generator) buildRandomPassword() string {
 	chars := LowerLetters + UpperLetters + Digits
 
-	if hasSymbols {
+	if g.HasSymbols {
 		chars += Symbols
 	}
 
 	password := ""
-	for i := 0; i < length; i++ {
+	for i := 0; i < g.Length; i++ {
 		password += string(chars[rand.Intn(len(chars))])
 	}
 
