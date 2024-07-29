@@ -1,3 +1,3 @@
-module github.com/pedr0rocha/password-generator-cli
+module github.com/pedr0rocha/passgen
 
 go 1.22

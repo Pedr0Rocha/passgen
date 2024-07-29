@@ -10,7 +10,7 @@ const (
 	LowerLetters = "abcdefghijklmnopqrstuvwxyz"
 	UpperLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	Digits       = "0123456789"
-	Symbols      = "@&$#!%*._+-=()[]{}:?"
+	Symbols      = "@&$#!%*._+-=()[]{}:?<>"
 )
 
 type Generator struct {
@@ -41,6 +41,8 @@ func (g Generator) Generate() (string, error) {
 	return password, nil
 }
 
+// A password is considered valid if its length is correct and it contains at least one of each:
+// upper case letter, lower case letter, digit and symbol (if enabled).
 func (g Generator) isValid(password string) bool {
 	if len(password) != g.Length {
 		return false

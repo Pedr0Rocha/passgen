@@ -1,44 +1,40 @@
-# CLI tool to generate simple passwords
+# Passgen - Password Generator CLI
 
-Generates a simple password up to 64 characters, using uppercase and lowercase letters, digits and symbols (if enabled).
+Generates a password up to 1024 characters. It guarantees at least one uppercase letter,
+lowercase letter, a digit and a symbol (if enabled).
 
 ## Install
 
-`go build -o $GOPATH/passgen`
+```bash
+go install github.com/pedr0rocha/passgen
+```
 
 ## Usage
 
-`passgen --help`
+```bash
+passgen --help
+-length [-l] (default 16)
+-symbols [-s] (default true)
+```
 
-`passgen generate --help`
+```bash
+passgen -length=64
+# OUTPUT: XzsOX_]Y3+O_a]}&#bJia:Qji6nWhwH==[DP:7nEw*eF#c:Joq1_Hx-bVlToM7JY
 
-## Examples
+passgen -l=24 -symbols=false
+# OUTPUT: B5m9MVbWNaULj37UJgBqt0vU
 
-Default flags, password length 15 with symbols:
-
-`passgen generate`
-
-Output > `J3x7_FF]E4HYd3.`
-
-
-Password length 30 without symbols:
-
-`passgen generate -l=30 -s=false`
-
-Output > `4bPkIAjshaoiJqowtY3qQqm5GNe6DD`
-
+passgen
+# OUTPUT: W8VrEF2h#!QWFdrP
+```
 
 ## Tests
 
-Run the tests using
-
-`go test ./password`
-
-or
-
-`go test -v ./...`
-
+```bash
+go test -v ./...
+```
 
 ## Disclaimer
 
-This password generator does **NOT** implement high entropy strategies and should not be used to extreme security requirement applications.
+This password generator does **NOT** implement high entropy strategies and should not be used
+to extreme security requirement applications.

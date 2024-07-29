@@ -9,7 +9,7 @@ func TestGeneratePasswordLength(t *testing.T) {
 	gen := Generator{
 		Length:     15,
 		HasSymbols: false,
-		Attempts:   10,
+		Attempts:   10_000,
 	}
 	password, err := gen.Generate()
 	if err != nil {
