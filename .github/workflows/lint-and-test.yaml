@@ -1,8 +1,8 @@
-name: Format & Test
+name: Lint & Test
 on: [push]
 
 jobs:
-  fmt-and-test:
+  lint-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,7 +13,7 @@ jobs:
         with:
           go-version: "1.22.x"
 
-      - name: Run formatter
+      - name: Run linter
         run: go fmt
 
       - name: Run tests
