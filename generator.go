@@ -19,6 +19,14 @@ type Generator struct {
 	Attempts   int
 }
 
+func NewGenerator(length int, hasSymbols bool) Generator {
+	return Generator{
+		Length:     length,
+		HasSymbols: hasSymbols,
+		Attempts:   10_000,
+	}
+}
+
 func (g Generator) Generate() (string, error) {
 	tries := g.Attempts
 

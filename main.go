@@ -35,11 +35,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	generator := Generator{
-		Length:     length,
-		HasSymbols: hasSymbols,
-		Attempts:   10_000,
-	}
+	generator := NewGenerator(length, hasSymbols)
 
 	password, err := generator.Generate()
 	if err != nil {

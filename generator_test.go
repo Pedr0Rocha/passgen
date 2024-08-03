@@ -5,54 +5,45 @@ import (
 	"testing"
 )
 
-func TestGeneratePasswordLength(t *testing.T) {
-	gen := Generator{
-		Length:     15,
-		HasSymbols: false,
-		Attempts:   10_000,
-	}
-	password, err := gen.Generate()
-	if err != nil {
-		t.Errorf("expected no error, got %s", err)
+func TestGenerator(t *testing.T) {
+	inputs := []Generator{
+		NewGenerator(1024, true),
+		NewGenerator(15, false),
+		NewGenerator(30, true),
+		NewGenerator(30, false),
 	}
 
-	if len(password) != gen.Length {
-		t.Errorf("expected %d, got %d", gen.Length, len(password))
-	}
-}
+	for _, gen := range inputs {
+		t.Run("Test generator", func(t *testing.T) {
+			password, err := gen.Generate()
+			if err != nil {
+				t.Errorf("expected no error, got %s", err)
+			}
 
-func TestGeneratePasswordHasSymbols(t *testing.T) {
-	gen := Generator{
-		Length:     30,
-		HasSymbols: true,
-		Attempts:   10_000,
-	}
-	password, err := gen.Generate()
-	if err != nil {
-		t.Errorf("expected no error, got %s", err)
-	}
+			containsSymbols := strings.ContainsAny(password, Symbols)
+			containsLowerCase := strings.ContainsAny(password, LowerLetters)
+			containsUpperCase := strings.ContainsAny(password, UpperLetters)
+			containsDigits := strings.ContainsAny(password, Digits)
 
-	containsSymbols := strings.ContainsAny(password, Symbols)
+			if gen.Length != len(password) {
+				t.Errorf("wrong length. expected %d, got %d", gen.Length, len(password))
+			}
 
-	if !containsSymbols {
-		t.Errorf("expected symbols, got %s", password)
-	}
-}
+			if gen.HasSymbols != containsSymbols {
+				t.Errorf("wrong password composition (symbols). expected %v, got %v", gen.HasSymbols, containsSymbols)
+			}
 
-func TestGeneratePasswordHasNoSymbols(t *testing.T) {
-	gen := Generator{
-		Length:     30,
-		HasSymbols: false,
-		Attempts:   10_000,
-	}
-	password, err := gen.Generate()
-	if err != nil {
-		t.Errorf("expected no error, got %s", err)
-	}
+			if !containsLowerCase {
+				t.Errorf("wrong password composition (lowercase letters). expected %v, got %v", true, containsLowerCase)
+			}
 
-	containsSymbols := strings.ContainsAny(password, Symbols)
+			if !containsUpperCase {
+				t.Errorf("wrong password composition (uppercase letters). expected %v, got %v", true, containsUpperCase)
+			}
 
-	if containsSymbols {
-		t.Errorf("expected no symbols, got %s", password)
+			if !containsDigits {
+				t.Errorf("wrong password composition (digits). expected %v, got %v", true, containsDigits)
+			}
+		})
 	}
 }
