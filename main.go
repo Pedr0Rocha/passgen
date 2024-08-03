@@ -12,15 +12,18 @@ const (
 )
 
 var (
-	length     int
-	hasSymbols bool
+	length  int
+	symbols bool
+	verbose bool
 )
 
 func main() {
 	flag.IntVar(&length, "length", 16, "Password length. Must be between 8 and 1024")
 	flag.IntVar(&length, "l", 16, "Password length. Must be between 8 and 1024 [shorthand]")
-	flag.BoolVar(&hasSymbols, "symbols", true, "Toggle symbols")
-	flag.BoolVar(&hasSymbols, "s", true, "Toggle symbols [shorthand]")
+	flag.BoolVar(&symbols, "symbols", true, "Toggle symbols")
+	flag.BoolVar(&symbols, "s", true, "Toggle symbols [shorthand]")
+	flag.BoolVar(&verbose, "verbose", false, "Verbose mode")
+	flag.BoolVar(&verbose, "v", false, "Verbose mode [shorthand]")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options]\n", os.Args[0])
@@ -35,7 +38,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	generator := NewGenerator(length, hasSymbols)
+	generator := NewGenerator(length, symbols)
 
 	password, err := generator.Generate()
 	if err != nil {
@@ -43,6 +46,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("%d character password generated:\n", generator.Length)
+	if verbose {
+		generator.PrintConfig()
+	}
 	fmt.Println(password)
 }

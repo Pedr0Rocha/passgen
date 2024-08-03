@@ -14,24 +14,28 @@ const (
 )
 
 type Generator struct {
-	Length     int
-	HasSymbols bool
-	Attempts   int
+	Length        int
+	HasSymbols    bool
+	Attempts      int
+	AttemptsTaken int
 }
 
-func NewGenerator(length int, hasSymbols bool) Generator {
-	return Generator{
-		Length:     length,
-		HasSymbols: hasSymbols,
-		Attempts:   10_000,
+func NewGenerator(length int, symbols bool) *Generator {
+	return &Generator{
+		Length:        length,
+		HasSymbols:    symbols,
+		Attempts:      10_000,
+		AttemptsTaken: 0,
 	}
 }
 
-func (g Generator) Generate() (string, error) {
+func (g *Generator) Generate() (string, error) {
 	tries := g.Attempts
 
 	password := ""
 	for tries > 0 {
+		g.AttemptsTaken++
+
 		password = g.buildRandomPassword()
 		isValid := g.isValid(password)
 
@@ -51,7 +55,7 @@ func (g Generator) Generate() (string, error) {
 
 // A password is considered valid if its length is correct and it contains at least one of each:
 // upper case letter, lower case letter, digit and symbol (if enabled).
-func (g Generator) isValid(password string) bool {
+func (g *Generator) isValid(password string) bool {
 	if len(password) != g.Length {
 		return false
 	}
@@ -77,7 +81,14 @@ func (g Generator) isValid(password string) bool {
 	return true
 }
 
-func (g Generator) buildRandomPassword() string {
+func (g *Generator) PrintConfig() {
+	fmt.Printf("Configuration:\n")
+	fmt.Printf("- Length: %d\n", g.Length)
+	fmt.Printf("- Symbols: %v\n", g.HasSymbols)
+	fmt.Printf("- Attempts: %d\n\n", g.AttemptsTaken)
+}
+
+func (g *Generator) buildRandomPassword() string {
 	chars := LowerLetters + UpperLetters + Digits
 
 	if g.HasSymbols {

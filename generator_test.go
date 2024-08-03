@@ -6,7 +6,7 @@ import (
 )
 
 func TestGenerator(t *testing.T) {
-	inputs := []Generator{
+	inputs := []*Generator{
 		NewGenerator(1024, true),
 		NewGenerator(15, false),
 		NewGenerator(30, true),
@@ -43,6 +43,10 @@ func TestGenerator(t *testing.T) {
 
 			if !containsDigits {
 				t.Errorf("wrong password composition (digits). expected %v, got %v", true, containsDigits)
+			}
+
+			if gen.AttemptsTaken == 0 {
+				t.Errorf("wrong attemps taken. expected > 0, got %v", gen.AttemptsTaken)
 			}
 		})
 	}

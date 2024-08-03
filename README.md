@@ -15,6 +15,7 @@ go install github.com/pedr0rocha/passgen@latest
 passgen --help
 -length [-l] (default 16)
 -symbols [-s] (default true)
+-verbose [-v] (default false)
 ```
 
 ```bash
@@ -26,12 +27,21 @@ passgen -l=24 -symbols=false
 
 passgen
 # OUTPUT: W8VrEF2h#!QWFdrP
+
+passgen -v
+# OUTPUT:
+# Configuration:
+# - Length: 16
+# - Symbols: true
+# - Attempts: 1
+#
+# Ok0E3L?7]TSe=-Ws
 ```
 
 ## Tests
 
 ```bash
-go test -v ./...
+make test
 ```
 
 ## Disclaimer
