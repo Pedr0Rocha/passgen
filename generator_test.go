@@ -7,10 +7,10 @@ import (
 
 func TestGenerator(t *testing.T) {
 	inputs := []*Generator{
-		NewGenerator(1024, true),
-		NewGenerator(15, false),
-		NewGenerator(30, true),
-		NewGenerator(30, false),
+		NewGenerator(1024, true, false),
+		NewGenerator(15, false, true),
+		NewGenerator(30, true, false),
+		NewGenerator(30, false, true),
 	}
 
 	for _, gen := range inputs {

@@ -15,6 +15,7 @@ var (
 	length  int
 	symbols bool
 	verbose bool
+	encoded bool
 )
 
 func main() {
@@ -24,6 +25,8 @@ func main() {
 	flag.BoolVar(&symbols, "s", true, "Toggle symbols [shorthand]")
 	flag.BoolVar(&verbose, "verbose", false, "Verbose mode")
 	flag.BoolVar(&verbose, "v", false, "Verbose mode [shorthand]")
+	flag.BoolVar(&encoded, "base64", false, "Base64 encoded")
+	flag.BoolVar(&encoded, "b", false, "Base64 encoded [shorthand]")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options]\n", os.Args[0])
@@ -38,7 +41,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	generator := NewGenerator(length, symbols)
+	generator := NewGenerator(length, symbols, encoded)
 
 	password, err := generator.Generate()
 	if err != nil {
@@ -49,5 +52,9 @@ func main() {
 	if verbose {
 		generator.PrintConfig()
 	}
+
 	fmt.Println(password)
+	if encoded {
+		fmt.Printf("\n%s\n", generator.Base64Encode(password))
+	}
 }

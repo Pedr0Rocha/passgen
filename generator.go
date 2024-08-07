@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -16,14 +17,16 @@ const (
 type Generator struct {
 	Length        int
 	HasSymbols    bool
+	Encoded       bool
 	Attempts      int
 	AttemptsTaken int
 }
 
-func NewGenerator(length int, symbols bool) *Generator {
+func NewGenerator(length int, symbols, encoded bool) *Generator {
 	return &Generator{
 		Length:        length,
 		HasSymbols:    symbols,
+		Encoded:       encoded,
 		Attempts:      10_000,
 		AttemptsTaken: 0,
 	}
@@ -85,7 +88,12 @@ func (g *Generator) PrintConfig() {
 	fmt.Printf("Configuration:\n")
 	fmt.Printf("- Length: %d\n", g.Length)
 	fmt.Printf("- Symbols: %v\n", g.HasSymbols)
+	fmt.Printf("- Encoded: %v\n", g.Encoded)
 	fmt.Printf("- Attempts: %d\n\n", g.AttemptsTaken)
+}
+
+func (g *Generator) Base64Encode(password string) string {
+	return base64.StdEncoding.EncodeToString([]byte(password))
 }
 
 func (g *Generator) buildRandomPassword() string {
